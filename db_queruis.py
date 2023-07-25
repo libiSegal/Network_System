@@ -1,8 +1,10 @@
+import datetime
+
 import mysql.connector
 from mysql.connector import Error
-import first_file
+import sql_db_connection
 
-connection = first_file.db_connection
+connection = sql_db_connection.db_connection
 
 
 def execute_query(connection, query):
@@ -83,9 +85,9 @@ CREATE TABLE Communication (
 );
 """
 
-pop_technicians = """
-INSERT INTO Technicians (Username, Password) VALUES 
-    ('Eli_Marom', 'abc123');"""
+insert_client = """
+INSERT INTO Clients (Name) VALUES 
+    ('BJT_Seminary');"""
 
 q1 = """
 SELECT *
@@ -95,7 +97,18 @@ d1 ="""
 DROP TABLE Technicians
 """
 
+import time
+date = str(datetime.date.today())
+print(date)
+val = (1, date, "Jerusalem")
+sql = "INSERT INTO Network(ClientId, Date, Location) VALUES {}".format(val)
+
+
+
+
+
 
 # results = read_query(connection, q1)
 # for result in results:
 #   print(result)
+
