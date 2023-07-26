@@ -11,7 +11,7 @@ async def upload_pcap_file(file: UploadFile = File(...)):
     # Check if a file was provided in the request
     if not file:
         return 'No file uploaded', 400
-
+    # call the appropriate function
     return f'File{file.filename} uploaded successfully'
 
 
@@ -20,6 +20,7 @@ async def get_network_communication(network_id):
     return "קריאה לפונקציה ששולפת"
 
 
+# Maybe we need to return also the devices?
 @app.get("/network/{network_id}")
 async def get_network_details(network_id):
     return network_handle.get_network_details(network_id)

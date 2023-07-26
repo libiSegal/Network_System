@@ -1,24 +1,18 @@
-from scapy.all import *
-import cap_file_analyze
-import db_queruis
-import sql_db_connection
+from moduls import sql_db_connection as db
 
-connection = sql_db_connection.db_connection
-
-
-def help():
-    p = rdpcap(r'C:\bootcamp\evidence02.pcap')
-    all_devices = cap_file_analyze.get_all_devices(p)
-    insert_devices(all_devices, 1)
+connection = db.db_connection
 
 
 def insert_devices(all_devices_for_network, network_id):
-    # rows_to_insert = [(device, network_id) for device in all_devices_for_network]
-    # values_to_insert = ', '.join(map(str, rows_to_insert))
     values_to_insert = ', '.join(f'({device}, {network_id})' for device in all_devices_for_network)
     print(values_to_insert)
-    sql_query = f'INSERT INTO Device(MACAddress, NetworkId) VALUES {values_to_insert}'
-    db_queruis.execute_query(connection, sql_query)
+    insert_devices_query = f'INSERT INTO Device(MACAddress, NetworkId) VALUES {values_to_insert}'
+    db.execute_query(connection, insert_devices_query)
 
 
-# insert_devices(all_devices, 1)
+def get_all_devices(network_id):
+    select_devices_query = 'SELECT Device.MACAddress ' \
+                           'FROM Network ' \
+                           'LEFT JOIN Device ON Network.Id = Device.NetworkId ' \
+                           f'WHERE Network.Id = {network_id} '
+    return db.read_query(connection, select_devices_query)

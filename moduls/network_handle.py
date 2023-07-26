@@ -1,4 +1,4 @@
-import sql_db_connection as db
+from moduls import sql_db_connection as db
 
 connection = db.db_connection
 
@@ -9,5 +9,5 @@ def get_network_details(network_id):
                            'INNER JOIN Clients ON Network.ClientId=Clients.Id ' \
                            f'WHERE Network.Id = {network_id} '
 
-    return db.execute_query(connection, select_network_query)
+    return db.read_query(connection, select_network_query)
 
