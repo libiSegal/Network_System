@@ -11,3 +11,12 @@ def get_network_details(network_id):
 
     return db.read_query(connection, select_network_query)
 
+# SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress
+# FROM Network
+# INNER JOIN Clients ON Network.ClientId = Clients.Id
+# LEFT JOIN (
+#     SELECT MACAddress, NetworkId
+#     FROM Device
+#     WHERE NetworkId = {network_id}
+# ) AS Device ON Network.Id = Device.NetworkId
+# WHERE Network.Id = {network_id};

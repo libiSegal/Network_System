@@ -15,4 +15,7 @@ def get_all_devices(network_id):
                            'FROM Network ' \
                            'LEFT JOIN Device ON Network.Id = Device.NetworkId ' \
                            f'WHERE Network.Id = {network_id} '
+
     return db.read_query(connection, select_devices_query)
+
+
