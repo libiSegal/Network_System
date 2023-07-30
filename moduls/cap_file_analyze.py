@@ -4,7 +4,7 @@ from scapy.utils import rdpcap
 
 
 def get_packets(cap_file):
-    file_content = BytesIO(cap_file)
+    file_content = BytesIO(cap_file.file.read())
     return rdpcap(file_content)
 
 
