@@ -28,7 +28,8 @@ def execute_query(connection, query):
         cursor = connection.cursor(buffered=True)
         cursor.execute(query)
         connection.commit()
-        print("Query successful")
+        id = cursor.lastrowid
+        return id
     except Error as err:
         print(f"Error: '{err}'")
 

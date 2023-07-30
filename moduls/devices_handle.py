@@ -4,9 +4,9 @@ connection = db.db_connection
 
 
 def insert_devices(all_devices_for_network, network_id):
-    values_to_insert = ', '.join(f'({device}, {network_id})' for device in all_devices_for_network)
-    print(values_to_insert)
-    insert_devices_query = f'INSERT INTO Device(MACAddress, NetworkId) VALUES {values_to_insert}'
+    values_to_insert = ', '.join(f"('{device}', {network_id})" for device in all_devices_for_network)
+    insert_devices_query = f"INSERT INTO Device (MACAddress, NetworkId) VALUES {values_to_insert}"
+    print(insert_devices_query)
     db.execute_query(connection, insert_devices_query)
 
 
@@ -17,5 +17,3 @@ def get_all_devices(network_id):
                            f'WHERE Network.Id = {network_id} '
 
     return db.read_query(connection, select_devices_query)
-
-

@@ -1,19 +1,22 @@
 from moduls import network_handle
 from moduls import cap_file_analyze
+from moduls import devices_handle
+
 import uvicorn
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 
 app = FastAPI()
 
 
 # api/network/?path=""&user=""..
 @app.post("/upload")
-async def upload_pcap_file(file: UploadFile = File(...)):
+async def upload_pcap_file(file: UploadFile = File(...),
+                           client_id: str = Form(...),
+                           location: str = Form(...)):
     # Check if a file was provided in the request
     if not file:
         return 'No file uploaded', 400
-    pkts = cap_file_analyze.get_packets(file)
-    print(cap_file_analyze.get_all_devices(pkts))
+    network_handle.create_network(file, client_id, location)
     return f'File{file.filename} uploaded successfully'
 
 
