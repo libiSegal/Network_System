@@ -1,6 +1,5 @@
 from moduls import network_handle
-from moduls import cap_file_analyze
-from moduls import devices_handle
+from moduls import communication_handle
 
 import uvicorn
 from fastapi import FastAPI, UploadFile, File, Form
@@ -8,7 +7,6 @@ from fastapi import FastAPI, UploadFile, File, Form
 app = FastAPI()
 
 
-# api/network/?path=""&user=""..
 @app.post("/upload")
 async def upload_pcap_file(file: UploadFile = File(...),
                            client_id: str = Form(...),
@@ -22,7 +20,7 @@ async def upload_pcap_file(file: UploadFile = File(...),
 
 @app.get("/network/{network_id}/communication")
 async def get_network_communication(network_id):
-    return "קריאה לפונקציה ששולפת"
+    return communication_handle.get_communication(network_id)
 
 
 # Maybe we need to return also the devices?
