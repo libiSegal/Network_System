@@ -1,10 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
+from moduls import devices_handle
 
 app = FastAPI()
 
+
 @app.get("/network/{network_id}/devices/")
 async def greet_user(network_id):
-    return {"devices":"קריאה לפונקציה ששולפת את המכשירים לפי id של הרשת"}
+    return devices_handle.get_all_devices(network_id)
 
-uvicorn.run(app, host="localhost", port=8000)
+
+uvicorn.run(app, host="127.0.0.1", port=8000)
