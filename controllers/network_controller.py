@@ -17,7 +17,6 @@ async def upload_pcap_file(file: UploadFile = File(...)):
 async def get_network_communication(network_id):
     return "קריאה לפונקציה ששולפת"
 
-# api/netwok/user_id|network_id
 @app.get("/network/{user_id}/{network_id}")
 async def get_network_data(user_id,network_id):
     return "קריאה לפונקציה ששולפת"
