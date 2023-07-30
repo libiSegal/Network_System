@@ -1,4 +1,5 @@
 from moduls import network_handle
+from moduls import cap_file_analyze
 import uvicorn
 from fastapi import FastAPI, UploadFile, File
 
@@ -11,7 +12,7 @@ async def upload_pcap_file(file: UploadFile = File(...)):
     # Check if a file was provided in the request
     if not file:
         return 'No file uploaded', 400
-    # call the appropriate function
+    print(cap_file_analyze.get_all_devices(file))
     return f'File{file.filename} uploaded successfully'
 
 

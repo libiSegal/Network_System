@@ -6,7 +6,7 @@ app = FastAPI()
 
 
 @app.get("/network/{network_id}/devices/")
-async def greet_user(network_id):
+async def get_devices(network_id):
     return devices_handle.get_all_devices(network_id)
 
 
