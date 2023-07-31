@@ -50,7 +50,8 @@ def organize_network_details(data_from_db):
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
     organize_data['Devices'] = [i[3] for i in organize_data]
     communications = [{"source": i[4], "destination": i[5]} for i in data_from_db]
-    organize_data["communication"] = communications
+    organize_communications = communication_handle.organize_communication(communications)
+    organize_data["communication"] = organize_communications
     return organize_data
 
 

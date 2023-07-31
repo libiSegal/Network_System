@@ -23,10 +23,10 @@ async def get_network_communication(network_id):
     return communication_handle.get_communication(network_id)
 
 
-# Maybe we need to return also the devices?
 @app.get("/network/{network_id}")
 async def get_network_details(network_id):
-    return network_handle.get_network_details(network_id)
+    data = network_handle.get_network_data(network_id)
+    return network_handle.organize_network_details(data)
 
 
 uvicorn.run(app, host="127.0.0.1", port=8000)

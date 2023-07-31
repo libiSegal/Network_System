@@ -14,6 +14,5 @@ def get_all_devices(network_id):
     select_devices_query = 'SELECT Device.MACAddress ' \
                            'FROM Network ' \
                            'LEFT JOIN Device ON Network.Id = Device.NetworkId ' \
-                           f'WHERE Network.Id = {network_id} '
-
+                           f'WHERE Network.Id = {network_id}fr '
     return db.read_query(connection, select_devices_query)

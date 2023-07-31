@@ -1,4 +1,3 @@
-from scapy.all import *
 from scapy.libs.six import BytesIO
 from scapy.utils import rdpcap
 
