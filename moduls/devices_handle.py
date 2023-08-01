@@ -15,4 +15,17 @@ def get_all_devices(network_id):
                            FROM Network 
                            LEFT JOIN Device ON Network.Id = Device.NetworkId 
                            WHERE Network.Id = {network_id}'''
-    return db.read_query(connection, select_devices_query)
+    data_from_db = db.read_query(connection, select_devices_query)
+    if data_from_db:
+        return [item for sublist in data_from_db for item in sublist]
+    raise Exception('No data for this network id')
+
+
+def get_devices_by_client_id(client_id):
+    select_devices_query = f"""SELECT d.MACAddress FROM Device d 
+                           JOIN Network n 
+                           ON d.NetworkId = n.Id WHERE n.ClientId = {client_id} """
+    data_from_db = db.read_query(connection, select_devices_query)
+    if data_from_db:
+        return [item for sublist in data_from_db for item in sublist]
+    raise Exception('No data for this client id')
