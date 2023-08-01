@@ -34,7 +34,7 @@ def insert_network(client_id, date, location):
 
 
 def get_network_data_from_db(network_id):
-    select_network_query = f'''SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, 
+    select_network_query = f"""SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, 
                            Communication.MACSource, Communication.MACDestination 
                            FROM Network 
                            INNER JOIN Clients 
@@ -45,7 +45,7 @@ def get_network_data_from_db(network_id):
                            AS Device ON Network.Id = Device.NetworkId 
                            LEFT JOIN Communication 
                            ON Device.MACAddress = Communication.MACSource 
-                           WHERE Network.Id = {network_id}'''
+                           WHERE Network.Id = {network_id}"""
 
     return db.read_query(connection, select_network_query)
 
@@ -58,3 +58,32 @@ def organize_network_details(data_from_db):
     organize_data["Devices"] = set(dev)
     organize_data["communication"] = [{"source": i[4], "destination": i[5]} for i in data_from_db]
     return organize_data
+
+
+
+
+
+# SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress
+# FROM Network
+# INNER JOIN Clients ON Network.ClientId = Clients.Id
+# LEFT JOIN (
+#     SELECT MACAddress, NetworkId
+#     FROM Device
+#     WHERE NetworkId = {network_id}
+# ) AS Device ON Network.Id = Device.NetworkId
+# WHERE Network.Id = {network_id};
+
+
+# SELECT Device.NetworkId, Communication.MACSource, Communication.MACDestination FROM Communication LEFT JOIN Device ON MACSource = Device.MACAddress
+# print(db.read_query(connection,
+#                     'SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, Communication.MACSource, Communication.MACDestination '
+#                     'FROM Network '
+#                     'INNER JOIN Clients '
+#                     'ON Network.ClientId = Clients.Id '
+#                     'LEFT JOIN ( '
+#                     'SELECT MACAddress, NetworkId '
+#                     f'FROM Device WHERE NetworkId = {network_id} ) '
+#                     'AS Device ON Network.Id = Device.NetworkId '
+#                     'LEFT JOIN Communication '
+#                     'ON Device.MACAddress = Communication.MACSource '
+#                     f'WHERE Network.Id = {network_id}'))
