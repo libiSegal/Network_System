@@ -1,0 +1,25 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <form action="http://localhost:8000/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+
+<!--    <form action="http://localhost:8000/network/" method="get" enctype="multipart/form-data">-->
+<!--        <button>get details by network id</button>-->
+<!--        </form>-->
+     <form action="/network" method="get">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required><br>
+        <label for="network_id">Network ID:</label>
+        <input type="text" id="network_id" name="network_id" required><br>
+        <input type="submit" value="Get Data">
+    </form>
+
+</body>
+</html>
