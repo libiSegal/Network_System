@@ -1,6 +1,11 @@
 from moduls import network_handle
 from moduls import communication_handle
+from moduls import network_visualization
 from fastapi import APIRouter, UploadFile, File, Form
+from fastapi.responses import FileResponse
+import io
+import PIL.Image as Image
+
 
 network_router = APIRouter()
 
@@ -25,3 +30,9 @@ async def get_network_communication(network_id):
 @network_router.get("/{network_id}")
 async def get_network_details(network_id):
     return network_handle.get_network_data(network_id)
+
+
+@network_router.get('/{network_id}/visual')
+async def a(network_id):
+    a =  network_visualization.get_visual(network_id)
+    return Image.open(io.BytesIO(a))

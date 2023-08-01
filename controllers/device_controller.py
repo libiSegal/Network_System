@@ -12,6 +12,6 @@ async def get_devices(network_id):
 
 @device_router.get("/{client_id}/devices/")
 async def get_network_data(client_id):
-    return devices_handle.get_network_data(client_id)
+    return devices_handle.get_devices_by_client_id(client_id)
 
 
