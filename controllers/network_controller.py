@@ -29,4 +29,4 @@ async def get_network_details(network_id):
     return network_handle.organize_network_details(data)
 
 
-uvicorn.run(app, host="127.0.0.1", port=8000)
+# uvicorn.run(app, host="127.0.0.1", port=8000)

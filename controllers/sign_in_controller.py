@@ -1,4 +1,8 @@
+# לא העתקנו לendpoints
+
+
 # api/signIn/token|id
+
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -24,4 +28,4 @@ async def main(username: str = Depends(get_current_username)):
     return {"username": username}
 
 
-uvicorn.run(app, host="localhost", port=8000)
+# uvicorn.run(app, host="localhost", port=8000)
