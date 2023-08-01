@@ -7,9 +7,11 @@ import datetime
 connection = db.db_connection
 
 
-def create_network(cap_file, client_id, location):
+def create_network(cap_file, client_id, location, technician_id):
+    print(check_technician_authorization(technician_id, client_id))
+    if not check_technician_authorization(technician_id, client_id):
+        raise Exception("AuthorizationError: This technician does not have the appropriate permission for this client")
     packets = cap_file_analyze.get_packets(cap_file)
-    print(packets)
     devices = cap_file_analyze.get_all_devices(packets)
     communication = cap_file_analyze.get_network_traffic(packets)
     network_id = insert_network(client_id, str(datetime.date.today()), location)
@@ -57,30 +59,10 @@ def organize_network_details(data_from_db):
     return organize_data
 
 
+def check_technician_authorization(technician_id, client_id):
+    select_query = f'''SELECT ClientId FROM 
+    Technician_Client WHERE TechnicianId = {technician_id}'''
+    clients = db.read_query(connection, select_query)
+    return any(int(client_id) in client for client in clients)
 
 
-
-# SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress
-# FROM Network
-# INNER JOIN Clients ON Network.ClientId = Clients.Id
-# LEFT JOIN (
-#     SELECT MACAddress, NetworkId
-#     FROM Device
-#     WHERE NetworkId = {network_id}
-# ) AS Device ON Network.Id = Device.NetworkId
-# WHERE Network.Id = {network_id};
-
-
-# SELECT Device.NetworkId, Communication.MACSource, Communication.MACDestination FROM Communication LEFT JOIN Device ON MACSource = Device.MACAddress
-# print(db.read_query(connection,
-#                     'SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, Communication.MACSource, Communication.MACDestination '
-#                     'FROM Network '
-#                     'INNER JOIN Clients '
-#                     'ON Network.ClientId = Clients.Id '
-#                     'LEFT JOIN ( '
-#                     'SELECT MACAddress, NetworkId '
-#                     f'FROM Device WHERE NetworkId = {network_id} ) '
-#                     'AS Device ON Network.Id = Device.NetworkId '
-#                     'LEFT JOIN Communication '
-#                     'ON Device.MACAddress = Communication.MACSource '
-#                     f'WHERE Network.Id = {network_id}'))
