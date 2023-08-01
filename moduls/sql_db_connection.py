@@ -2,9 +2,9 @@ import mysql.connector
 from mysql.connector import Error
 
 HOST = "sql7.freesqldatabase.com"
-USER = "sql7634893"
-PASSWORD = "8RT5Q9GPpZ"
-DATABASE = "sql7634893"
+USER = "sql7636694"
+PASSWORD = "9jmGbPjhLU"
+DATABASE = "sql7636694"
 
 
 def create_server_connection(host_name, user_name, user_password, database):
