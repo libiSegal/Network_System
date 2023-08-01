@@ -59,7 +59,7 @@
 #     Id INT AUTO_INCREMENT PRIMARY KEY,
 #     ClientId INT,
 #     Date DATE,
-#     PremiseLocationName VARCHAR(255),
+#     LocationName VARCHAR(255),
 #     FOREIGN KEY (ClientId) REFERENCES Clients(Id)
 # );
 # """

@@ -9,6 +9,7 @@ connection = db.db_connection
 
 def create_network(cap_file, client_id, location):
     packets = cap_file_analyze.get_packets(cap_file)
+    print(packets)
     devices = cap_file_analyze.get_all_devices(packets)
     communication = cap_file_analyze.get_network_traffic(packets)
     network_id = insert_network(client_id, str(datetime.date.today()), location)
@@ -48,17 +49,12 @@ def get_network_data_from_db(network_id):
 
 def organize_network_details(data_from_db):
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
-    organize_data['Devices'] = [i[3] for i in organize_data]
-    communications = [{"source": i[4], "destination": i[5]} for i in data_from_db]
-    organize_communications = communication_handle.organize_communication(communications)
-    organize_data["communication"] = organize_communications
+    dev = []
+    for i in data_from_db:
+        dev.append(i[3])
+    organize_data["Devices"] = set(dev)
+    organize_data["communication"] = [{"source": i[4], "destination": i[5]} for i in data_from_db]
     return organize_data
-
-
-
-
-
-
 
 
 

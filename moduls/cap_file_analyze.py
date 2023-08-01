@@ -1,5 +1,5 @@
 from scapy.libs.six import BytesIO
-from scapy.utils import rdpcap
+from scapy.all import rdpcap
 
 
 def get_packets(cap_file):

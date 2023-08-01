@@ -1,13 +1,11 @@
 from moduls import network_handle
 from moduls import communication_handle
+from fastapi import APIRouter, UploadFile, File, Form
 
-import uvicorn
-from fastapi import FastAPI, UploadFile, File, Form
-
-app = FastAPI()
+network_router = APIRouter()
 
 
-@app.post("/upload")
+@network_router.post("/upload")
 async def upload_pcap_file(file: UploadFile = File(...),
                            client_id: str = Form(...),
                            location: str = Form(...)):
@@ -18,15 +16,12 @@ async def upload_pcap_file(file: UploadFile = File(...),
     return f'File{file.filename} uploaded successfully'
 
 
-@app.get("/network/{network_id}/communication")
+@network_router.get("{network_id}/communication")
 async def get_network_communication(network_id):
     return communication_handle.get_communication(network_id)
 
 
-@app.get("/network/{network_id}")
+@network_router.get("/{network_id}")
 async def get_network_details(network_id):
-    data = network_handle.get_network_data(network_id)
-    return network_handle.organize_network_details(data)
+    return network_handle.get_network_data(network_id)
 
-
-# uvicorn.run(app, host="127.0.0.1", port=8000)
