@@ -15,4 +15,4 @@ def get_all_devices(packets):
 # this function return the network traffic by mac address
 # 'TODO: add protocol to the network traffic'
 def get_network_traffic(packets):
-    return [(pkt.src, pkt.dst) for pkt in packets if 'ARP' or 'Raw' in pkt]
+    return {(pkt.src, pkt.dst) for pkt in packets if 'ARP' or 'Raw' in pkt}
