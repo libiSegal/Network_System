@@ -11,8 +11,8 @@ def insert_devices(all_devices_for_network, network_id):
 
 
 def get_all_devices(network_id):
-    select_devices_query = 'SELECT Device.MACAddress ' \
-                           'FROM Network ' \
-                           'LEFT JOIN Device ON Network.Id = Device.NetworkId ' \
-                           f'WHERE Network.Id = {network_id}fr '
+    select_devices_query = f'''SELECT Device.MACAddress 
+                           FROM Network 
+                           LEFT JOIN Device ON Network.Id = Device.NetworkId 
+                           WHERE Network.Id = {network_id}'''
     return db.read_query(connection, select_devices_query)
