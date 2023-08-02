@@ -11,9 +11,10 @@ def create_network(cap_file, client_id, location, technician_id):
     if not technician_crud.check_technician_authorization(technician_id, client_id):
         raise Exception("AuthorizationError: This technician does not have the appropriate permission for this client")
     packets = cap_file_analyze.get_packets(cap_file)
-    devices = cap_file_analyze.get_devices(packets)
+    date = cap_file_analyze.get_pcap_date(packets)
+    devices = cap_file_analyze.get_all_devices(packets)
     communication = cap_file_analyze.get_network_traffic(packets)
-    network_id = insert_network(client_id, str(datetime.date.today()), location)
+    network_id = insert_network(client_id, str(date), location)
     devices_handle.insert_devices(devices, network_id)
     communication_handle.insert_communication(communication)
 
@@ -49,12 +50,11 @@ def get_network_data_from_db(network_id):
 
 
 def organize_network_details(data_from_db):
-    print("data", data_from_db)
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
-    dev = []
+    devices = []
     for i in data_from_db:
-        dev.append((i[3], i[4]))
-    organize_data["Devices"] = set(dev)
+        devices.append((i[3], i[4]))
+    organize_data["Devices"] = set(devices)
     communication = [(i[5], i[6]) for i in data_from_db]
     organize_data["communication"] = [sub for sub in communication if not all(ele is None for ele in sub)]
     return organize_data
