@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+from log_file import logger
 
 HOST = "sql7.freesqldatabase.com"
 USER = "sql7636694"
@@ -7,6 +8,7 @@ PASSWORD = "9jmGbPjhLU"
 DATABASE = "sql7636694"
 
 
+@logger
 def create_server_connection(host_name, user_name, user_password, database):
     connection = None
     try:
@@ -23,6 +25,7 @@ def create_server_connection(host_name, user_name, user_password, database):
     return connection
 
 
+@logger
 def execute_query(connection, query):
     try:
         cursor = connection.cursor(buffered=True)
@@ -34,6 +37,7 @@ def execute_query(connection, query):
         print(f"Error: '{err}'")
 
 
+@logger
 def read_query(connection, query):
     cursor = connection.cursor(buffered=True)
     try:

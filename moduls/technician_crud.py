@@ -1,14 +1,19 @@
 from moduls import sql_db_connection as db
-
+from handle_exception import HandleException
+from log_file import logger
 connection = db.db_connection
 
 
+@HandleException
+@logger
 def get_technician_details(technician_id):
     data_from_db = get_technician_details_from_db(technician_id)
     organize_data = {"name": data_from_db[0][0], "clients": [i[1] for i in data_from_db]}
     return organize_data
 
 
+@HandleException
+@logger
 def get_technician_details_from_db(technician_id):
     select_clients_query = f'''SELECT Technicians.Username, Clients.Name 
                             FROM Technicians 
@@ -20,6 +25,8 @@ def get_technician_details_from_db(technician_id):
     return db.read_query(connection, select_clients_query)
 
 
+@HandleException
+@logger
 def check_technician_authorization(technician_id, client_id):
     select_query = f'''SELECT ClientId FROM 
     Technician_Client WHERE TechnicianId = {technician_id}'''

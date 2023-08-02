@@ -1,11 +1,12 @@
-import datetime
 from moduls import sql_db_connection as db, cap_file_analyze, devices_handle, communication_handle
 from moduls import technician_crud
+from handle_exception import HandleException
 from log_file import logger
 
 connection = db.db_connection
 
 
+@HandleException
 @logger
 def create_network(cap_file, client_id, location, technician_id):
     if not technician_crud.check_technician_authorization(technician_id, client_id):
@@ -19,6 +20,7 @@ def create_network(cap_file, client_id, location, technician_id):
     communication_handle.insert_communication(communication)
 
 
+@HandleException
 @logger
 def get_network_data(network_id):
     data_from_db = get_network_data_from_db(network_id)
@@ -27,6 +29,7 @@ def get_network_data(network_id):
     raise Exception('No data for this network id')
 
 
+@HandleException
 @logger
 def insert_network(client_id, date, location):
     details = (client_id, date, location)
@@ -34,6 +37,7 @@ def insert_network(client_id, date, location):
     return db.execute_query(connection, insert_sql_query)
 
 
+@HandleException
 @logger
 def get_network_data_from_db(network_id):
     select_network_query = f"""SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, Device.Vendor,
@@ -52,6 +56,7 @@ def get_network_data_from_db(network_id):
     return db.read_query(connection, select_network_query)
 
 
+@HandleException
 @logger
 def organize_network_details(data_from_db):
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
@@ -62,3 +67,12 @@ def organize_network_details(data_from_db):
     communication = [(i[5], i[6]) for i in data_from_db]
     organize_data["communication"] = [sub for sub in communication if not all(ele is None for ele in sub)]
     return organize_data
+
+
+@HandleException
+@logger
+def get_network_client(network_id):
+    select_query = f'''SELECT ClientId FROM
+    Network WHERE Id = {network_id}'''
+    client = db.read_query(connection, select_query)
+    return client

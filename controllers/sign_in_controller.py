@@ -1,9 +1,7 @@
 from moduls import security
-from datetime import datetime, timedelta
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, status, Request, Response, encoders, APIRouter
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
-    OAuth2
+from datetime import timedelta
+from fastapi import Depends, HTTPException, status, Response, encoders, APIRouter
+from fastapi.security import OAuth2PasswordRequestForm
 
 sign_in_router = APIRouter()
 

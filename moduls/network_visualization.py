@@ -1,9 +1,11 @@
 import networkx as nx
 from moduls import network_handle
 import matplotlib.pyplot as plt
+from handle_exception import HandleException
 from log_file import logger
 
 
+@HandleException
 @logger
 def get_visual(network_id):
     network_data = network_handle.get_network_data(network_id)

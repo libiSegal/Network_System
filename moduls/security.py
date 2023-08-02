@@ -9,12 +9,14 @@ from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from moduls import technician_crud
+from moduls.Exception import AuthorizationError
 
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 connection = db.db_connection
 
@@ -64,6 +66,7 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+    id: int
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -75,9 +78,10 @@ def list_to_dict(input_list):
     dict_of_dicts = {}
     for sublist in input_list:
         if len(sublist) >= 4:
+            id = sublist[0]
             username = sublist[1]
             password = sublist[2]
-            inner_dict = {"username": username, "hashed_password": password}
+            inner_dict = {"id": id, "username": username, "hashed_password": password}
             key = sublist[1]
             dict_of_dicts[key] = inner_dict
     return dict_of_dicts
@@ -150,3 +154,9 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     if current_user and current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user,please login")
     return current_user
+
+
+async def check_technician_authorization(client_id, current_technician: User = Depends(get_current_active_user)):
+    if not technician_crud.check_technician_authorization(current_technician.id, client_id):
+        raise AuthorizationError("This technician does not have the appropriate permission  for this client ")
+    return True

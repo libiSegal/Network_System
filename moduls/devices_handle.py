@@ -1,8 +1,12 @@
 from moduls import sql_db_connection as db
+from handle_exception import HandleException
+from log_file import logger
 
 connection = db.db_connection
 
 
+@HandleException
+@logger
 def insert_devices(all_devices_for_network, network_id):
     values_to_insert = ', '.join(
         f"('{device['mac']}', {network_id}, '{device['vendor']}')" for device in all_devices_for_network)
@@ -10,6 +14,8 @@ def insert_devices(all_devices_for_network, network_id):
     db.execute_query(connection, insert_devices_query)
 
 
+@HandleException
+@logger
 def get_all_devices(network_id):
     select_devices_query = f'''SELECT Device.MACAddress, Device.vendor 
                            FROM Network 
@@ -21,6 +27,8 @@ def get_all_devices(network_id):
     raise Exception('No data for this network id')
 
 
+@HandleException
+@logger
 def get_devices_by_client_id(client_id):
     select_devices_query = f"""SELECT d.MACAddress FROM Device d 
                            JOIN Network n 
@@ -31,8 +39,8 @@ def get_devices_by_client_id(client_id):
     raise Exception('No data for this client id')
 
 
+@HandleException
+@logger
 def get_devices_by_vendor(network_id, vendor):
     devices = get_all_devices(network_id)
     return [device for device in devices if device[1] == vendor]
-
-
