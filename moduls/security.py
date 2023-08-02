@@ -5,7 +5,6 @@ connection = db.db_connection
 from datetime import datetime, timedelta
 from typing import Union, Optional, Dict
 
-import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status, Request, Response, encoders
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
     OAuth2
@@ -65,6 +64,7 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+    id: int
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -75,9 +75,10 @@ def list_to_dict(input_list):
     dict_of_dicts = {}
     for sublist in input_list:
         if len(sublist) >= 4:
+            id = sublist[0]
             username = sublist[1]
             password = sublist[2]
-            inner_dict = {"username": username, "hashed_password": password}
+            inner_dict = {"id": id, "username": username, "hashed_password": password}
             key = sublist[1]
             dict_of_dicts[key] = inner_dict
     return dict_of_dicts
