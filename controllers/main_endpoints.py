@@ -5,6 +5,7 @@ from device_controller import device_router
 from tachnician_controller import technician_router
 from sign_in_controller import sign_in_router
 
+
 app = FastAPI()
 
 

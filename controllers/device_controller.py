@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from moduls import devices_handle
+from moduls import devices_handle, technician_crud
 from moduls import security
 from moduls.Exception import AuthorizationError
 from log_file import logger
