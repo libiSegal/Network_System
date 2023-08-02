@@ -22,4 +22,6 @@ async def get_network_data(client_id, current_user: security.User = Depends(secu
 @device_router.get("/network/{network_id}/filter-devices/")
 async def get_filtering_devices(network_id, vendor: str = '',
                                 current_user: security.User = Depends(security.get_current_active_user)):
+    if type(network_id) != int:
+        raise HTTPException(400, 'Invalid input')
     return devices_handle.get_devices_by_vendor(network_id, vendor)
