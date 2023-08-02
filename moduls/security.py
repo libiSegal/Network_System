@@ -5,6 +5,7 @@ connection = db.db_connection
 from datetime import datetime, timedelta
 from typing import Union, Optional, Dict
 
+import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status, Request, Response, encoders
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
     OAuth2
@@ -21,14 +22,16 @@ SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
+connection = db.db_connection
+
 
 class OAuth2PasswordBearerWithCookie(OAuth2):
     def __init__(
-        self,
-        tokenUrl: str,
-        scheme_name: Optional[str] = None,
-        scopes: Optional[Dict[str, str]] = None,
-        auto_error: bool = True,
+            self,
+            tokenUrl: str,
+            scheme_name: Optional[str] = None,
+            scopes: Optional[Dict[str, str]] = None,
+            auto_error: bool = True,
     ):
         if not scopes:
             scopes = {}
@@ -36,7 +39,7 @@ class OAuth2PasswordBearerWithCookie(OAuth2):
         super().__init__(flows=flows, scheme_name=scheme_name, auto_error=auto_error)
 
     async def __call__(self, request: Request) -> Optional[str]:
-        authorization: str = request.cookies.get("Authorization")  #changed to accept access token from httpOnly Cookie
+        authorization: str = request.cookies.get("Authorization")  # changed to accept access token from httpOnly Cookie
 
         scheme, param = get_authorization_scheme_param(authorization)
         if not authorization or scheme.lower() != "bearer":
@@ -83,11 +86,14 @@ def list_to_dict(input_list):
             dict_of_dicts[key] = inner_dict
     return dict_of_dicts
 
-def get_all_tecniquies():
+
+def get_all_technicians():
     select_network_query = 'SELECT * FROM Technicians'
     return list_to_dict(db.read_query(connection, select_network_query))
 
-tecniquies = get_all_tecniquies()
+
+technicians = get_all_technicians()
+
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -134,7 +140,7 @@ async def get_current_user(token: str = Depends(oauth2_cookie_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(tecniquies, username=token_data.username)
+    user = get_user(technicians, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user

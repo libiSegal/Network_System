@@ -1,14 +1,16 @@
 from moduls import security
 from datetime import datetime, timedelta
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, status, Request, Response, encoders,APIRouter
+from fastapi import Depends, FastAPI, HTTPException, status, Request, Response, encoders, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
     OAuth2
+
 sign_in_router = APIRouter()
+
 
 @sign_in_router.post("/login", response_model=security.Token)
 async def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
-    user = security.authenticate_user(security.tecniquies, form_data.username, form_data.password)
+    user = security.authenticate_user(security.technicians, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

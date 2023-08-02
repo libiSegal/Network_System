@@ -7,6 +7,7 @@ from sign_in_controller import sign_in_router
 
 app = FastAPI()
 
+
 app.include_router(network_router, prefix="/network")
 app.include_router(technician_router, prefix='/technician')
 app.include_router(device_router)
