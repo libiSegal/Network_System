@@ -29,21 +29,21 @@ async def upload_pcap_file(file: UploadFile = File(...),
 @network_router.get("/{network_id}/communication")
 async def get_network_communication(network_id,
                                     current_user: security.User = Depends(security.get_current_active_user)):
-    if type(network_id) != int:
+    if not network_id.isdecimal():
         raise HTTPException(400, 'Invalid input')
     return communication_handle.get_communication(network_id)
 
 
 @network_router.get("/{network_id}")
 async def get_network_details(network_id):
-    if type(network_id) != int:
+    if not network_id.isdecimal():
         raise HTTPException(400, 'Invalid input')
     return network_handle.get_network_data(network_id)
 
 
 @network_router.get('/{network_id}/visual')
 async def visual(network_id):
-    if type(network_id) != int:
+    if not network_id.isdecimal():
         raise HTTPException(400, 'Invalid input')
     network_visualization.get_visual(network_id)
     return FileResponse('graf.png')
