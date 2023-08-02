@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from scapy.libs.six import BytesIO
 from scapy.all import rdpcap
 
@@ -16,3 +18,7 @@ def get_all_devices(packets):
 # 'TODO: add protocol to the network traffic'
 def get_network_traffic(packets):
     return {(pkt.src, pkt.dst) for pkt in packets if 'ARP' or 'Raw' in pkt}
+
+
+def get_pcap_date(packets):
+    return datetime.fromtimestamp(int(packets[0].time)).date()
