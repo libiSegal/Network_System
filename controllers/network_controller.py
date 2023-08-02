@@ -1,12 +1,13 @@
+from flask import make_response, send_file
+
 from moduls import network_handle
 from moduls import communication_handle
 from moduls import network_visualization
 from moduls import security
-from fastapi import APIRouter, UploadFile, File, Form,Depends
+from fastapi import APIRouter, UploadFile, File, Form, Depends
 from fastapi.responses import FileResponse
 import io
 import PIL.Image as Image
-
 
 network_router = APIRouter()
 
@@ -34,6 +35,6 @@ async def get_network_details(network_id,current_user: security.User = Depends(s
 
 
 @network_router.get('/{network_id}/visual')
-async def a(network_id,current_user: security.User = Depends(security.get_current_active_user)):
-    a =  network_visualization.get_visual(network_id)
-    return Image.open(io.BytesIO(a))
+async def a(network_id):
+    network_visualization.get_visual(network_id)
+    return FileResponse('graf.png')

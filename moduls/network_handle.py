@@ -1,9 +1,6 @@
 from moduls import sql_db_connection as db
-from moduls import cap_file_analyze
-from moduls import communication_handle
-from moduls import devices_handle
 from moduls import technician_crud
-import datetime
+
 
 connection = db.db_connection
 
