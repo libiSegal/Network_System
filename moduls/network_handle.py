@@ -50,12 +50,11 @@ def get_network_data_from_db(network_id):
 
 
 def organize_network_details(data_from_db):
-    print("data", data_from_db)
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
-    dev = []
+    devices = []
     for i in data_from_db:
-        dev.append((i[3], i[4]))
-    organize_data["Devices"] = set(dev)
+        devices.append((i[3], i[4]))
+    organize_data["Devices"] = set(devices)
     communication = [(i[5], i[6]) for i in data_from_db]
     organize_data["communication"] = [sub for sub in communication if not all(ele is None for ele in sub)]
     return organize_data

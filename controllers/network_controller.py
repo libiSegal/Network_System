@@ -33,7 +33,7 @@ async def get_network_communication(network_id,
 
 
 @network_router.get("/{network_id}")
-async def get_network_details(network_id, current_user: security.User = Depends(security.get_current_active_user)):
+async def get_network_details(network_id):
     return network_handle.get_network_data(network_id)
 
 

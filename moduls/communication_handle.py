@@ -1,5 +1,4 @@
 from moduls import sql_db_connection as db
-from moduls import network_handle
 
 connection = db.db_connection
 
