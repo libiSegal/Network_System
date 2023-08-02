@@ -11,9 +11,10 @@ def create_network(cap_file, client_id, location, technician_id):
     if not technician_crud.check_technician_authorization(technician_id, client_id):
         raise Exception("AuthorizationError: This technician does not have the appropriate permission for this client")
     packets = cap_file_analyze.get_packets(cap_file)
-    devices = cap_file_analyze.get_devices(packets)
+    date = cap_file_analyze.get_pcap_date(packets)
+    devices = cap_file_analyze.get_all_devices(packets)
     communication = cap_file_analyze.get_network_traffic(packets)
-    network_id = insert_network(client_id, str(datetime.date.today()), location)
+    network_id = insert_network(client_id, str(date), location)
     devices_handle.insert_devices(devices, network_id)
     communication_handle.insert_communication(communication)
 
