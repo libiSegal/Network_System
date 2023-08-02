@@ -1,4 +1,5 @@
-from moduls import sql_db_connection as db
+from moduls import sql_db_connection as db, technician_crud
+from moduls.Exception import AuthorizationError
 
 connection = db.db_connection
 
@@ -20,7 +21,7 @@ from pydantic import BaseModel
 # openssl rand -hex 32
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 connection = db.db_connection
 
@@ -104,7 +105,6 @@ def get_password_hash(password):
 def get_user(db, username: str):
     if username in db:
         user_dict = db[username]
-        print(user_dict)
         return UserInDB(**user_dict)
 
 def authenticate_user(fake_db, username: str, password: str):
@@ -149,3 +149,8 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     if current_user and current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user,please login")
     return current_user
+
+async def check_technician_authorization(client_id,current_technician: User = Depends(get_current_active_user)):
+    if not technician_crud.check_technician_authorization(current_technician.id, client_id):
+        raise AuthorizationError("This technician does not have the appropriate permission for this client")
+    return True

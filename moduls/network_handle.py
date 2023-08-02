@@ -2,14 +2,17 @@ import datetime
 from moduls import sql_db_connection as db, cap_file_analyze, devices_handle, communication_handle
 from moduls import technician_crud
 from log_file import logger
+from moduls.Exception import AuthorizationError
 
 connection = db.db_connection
 
 
 @logger
 def create_network(cap_file, client_id, location, technician_id):
+    print(technician_crud.check_technician_authorization(technician_id, client_id))
     if not technician_crud.check_technician_authorization(technician_id, client_id):
-        raise Exception("AuthorizationError: This technician does not have the appropriate permission for this client")
+        print("client_id:"+client_id)
+        raise AuthorizationError("This technician does not have the appropriate permission for this client")
     packets = cap_file_analyze.get_packets(cap_file)
     date = cap_file_analyze.get_pcap_date(packets)
     devices = cap_file_analyze.get_devices(packets)
@@ -62,3 +65,9 @@ def organize_network_details(data_from_db):
     communication = [(i[5], i[6]) for i in data_from_db]
     organize_data["communication"] = [sub for sub in communication if not all(ele is None for ele in sub)]
     return organize_data
+
+def get_network_client(network_id):
+        select_query = f'''SELECT ClientId FROM 
+        Network WHERE Id = {network_id}'''
+        client = db.read_query(connection, select_query)
+        return client

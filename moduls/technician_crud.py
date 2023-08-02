@@ -25,3 +25,4 @@ def check_technician_authorization(technician_id, client_id):
     Technician_Client WHERE TechnicianId = {technician_id}'''
     clients = db.read_query(connection, select_query)
     return any(int(client_id) in client for client in clients)
+
