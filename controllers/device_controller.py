@@ -13,3 +13,5 @@ async def get_devices(network_id, current_user: security.User = Depends(security
 @device_router.get("/{client_id}/devices/")
 async def get_network_data(client_id, current_user: security.User = Depends(security.get_current_active_user)):
     return devices_handle.get_devices_by_client_id(client_id)
+
+
