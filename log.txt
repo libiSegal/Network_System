@@ -1,0 +1,7 @@
+
+INFO:root:Running function create_server_connection
+INFO:root:Running function read_query
+INFO:root:Running function get_network_data
+INFO:root:Running function get_network_data_from_db
+INFO:root:Running function read_query
+INFO:root:Running function organize_network_details
