@@ -15,3 +15,7 @@ async def get_network_data(client_id, current_user: security.User = Depends(secu
     return devices_handle.get_devices_by_client_id(client_id)
 
 
+@device_router.get("/network/{network_id}/filter-devices/")
+async def get_filtering_devices(network_id, vendor: str = '',
+                                current_user: security.User = Depends(security.get_current_active_user)):
+    return devices_handle.get_devices_by_vendor(network_id, vendor)
