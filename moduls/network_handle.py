@@ -11,6 +11,14 @@ connection = db.db_connection
 @HandleException
 @logger
 def create_network(cap_file, client_id, location, technician_id):
+    """
+    The function get a capture file analyze it and insert all details to db
+    :param cap_file: a capture file to analyze
+    :param client_id: the client that is the owner of the network
+    :param location: the location of the network
+    :param technician_id: the technician the upload the capture file
+    :return: NON
+    """
     if not technician_crud.check_technician_authorization(technician_id, client_id):
         print("client_id:"+client_id)
         raise AuthorizationError("This technician does not have the appropriate permission for this client")
@@ -26,6 +34,11 @@ def create_network(cap_file, client_id, location, technician_id):
 @HandleException
 @logger
 def get_network_data(network_id):
+    """
+    This function get the data from db and organize it
+    :param network_id: the network id to get the details
+    :return:all network data
+    """
     data_from_db = get_network_data_from_db(network_id)
     if data_from_db:
         return organize_network_details(data_from_db)
@@ -43,6 +56,11 @@ def insert_network(client_id, date, location):
 @HandleException
 @logger
 def get_network_data_from_db(network_id):
+    """
+    Select all the network data from tje sql db
+    :param network_id: network id to select the data
+    :return:all data from db
+    """
     select_network_query = f"""SELECT Network.Date, Network.Location, Clients.Name, Device.MACAddress, Device.Vendor,
                            Communication.MACSource, Communication.MACDestination 
                            FROM Network 
@@ -62,6 +80,11 @@ def get_network_data_from_db(network_id):
 @HandleException
 @logger
 def organize_network_details(data_from_db):
+    """
+    This function organize the data from the db
+    :param data_from_db:
+    :return:
+    """
     organize_data = {"Date": data_from_db[0][0], "Location": data_from_db[0][1], "client": data_from_db[0][2]}
     devices = []
     for i in data_from_db:
@@ -75,6 +98,11 @@ def organize_network_details(data_from_db):
 @HandleException
 @logger
 def get_network_client(network_id):
+    """
+    This function select the client from the network table
+    :param network_id: the network id
+    :return: the client id
+    """
     select_query = f'''SELECT ClientId FROM
     Network WHERE Id = {network_id}'''
     client = db.read_query(connection, select_query)
