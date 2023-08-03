@@ -8,6 +8,11 @@ from log_file import logger
 @HandleException
 @logger
 def get_visual(network_id):
+    """
+    This function plot a visualization of network communication
+    :param network_id:the id of the network
+    :return:
+    """
     network_data = network_handle.get_network_data(network_id)
     if not network_data:
         raise Exception('No data for this network')

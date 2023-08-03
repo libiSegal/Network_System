@@ -48,6 +48,13 @@ def get_network_data(network_id):
 @HandleException
 @logger
 def insert_network(client_id, date, location):
+    """
+    The function insert network details into db
+    :param client_idthe client of the network
+    :param date the data of take to capture file
+    :param location:the location of the network
+    :return:NAN
+    """
     details = (client_id, date, location)
     insert_sql_query = f'INSERT INTO Network(ClientId, Date, Location) VALUES {details}'
     return db.execute_query(connection, insert_sql_query)
